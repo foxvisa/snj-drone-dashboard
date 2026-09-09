@@ -200,7 +200,7 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
 .wolist{flex:1;overflow-y:auto;min-height:0;}
 .wolist::-webkit-scrollbar{width:4px;}
 .wolist::-webkit-scrollbar-thumb{background:rgba(56,189,248,.3);}
-.worow{display:flex;align-items:center;gap:9px;padding:6px 4px 6px 6px;font-size:12.5px;color:var(--txt);
+.worow{display:flex;align-items:center;gap:7px;padding:6px 4px 6px 6px;font-size:12.5px;color:var(--txt);
   cursor:pointer;position:relative;transition:background .2s,padding-left .2s;
   border-bottom:1px solid transparent;
   border-image:linear-gradient(90deg,rgba(56,189,248,.22),rgba(56,189,248,.02) 70%) 1;}
@@ -209,15 +209,18 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
 .worow:hover{background:linear-gradient(90deg,rgba(56,189,248,.1),transparent 75%);padding-left:10px;}
 .worow:hover::before{opacity:1;}
 .worow.s-run{--sc2:#f87171;}.worow.s-dir{--sc2:#22d3ee;}.worow.s-ok{--sc2:#34d399;}
-.wic{width:25px;height:25px;flex:none;display:flex;align-items:center;justify-content:center;
+.wic{width:24px;height:24px;flex:none;display:flex;align-items:center;justify-content:center;
   color:var(--ic,#38bdf8);background:color-mix(in srgb,var(--ic,#38bdf8) 13%,transparent);
   border:1px solid color-mix(in srgb,var(--ic,#38bdf8) 42%,transparent);
   clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,0 100%);
   filter:drop-shadow(0 0 4px color-mix(in srgb,var(--ic,#38bdf8) 45%,transparent));}
 .wic svg{width:14px;height:14px;}
 .worow .wc{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.5px;}
-.worow .wt{color:var(--dim);font-family:Consolas,monospace;font-size:11.5px;flex:none;}
-.worow .ws{flex:none;display:flex;align-items:center;gap:5px;padding:1px 9px;font-size:11px;
+.worow .wdev{font-weight:700;letter-spacing:.5px;}
+.worow .wcode{font-family:Consolas,monospace;font-size:10.5px;font-weight:400;opacity:.8;letter-spacing:0;}
+.worow .whint{color:var(--dim);margin-left:5px;font-size:11px;letter-spacing:1px;flex:none;}
+.worow .wt{color:var(--dim);font-family:Consolas,monospace;font-size:11px;flex:none;}
+.worow .ws{flex:none;display:flex;align-items:center;gap:5px;padding:1px 7px;font-size:11px;
   border:1px solid;white-space:nowrap;border-radius:10px;letter-spacing:1px;}
 .worow .ws::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;
   box-shadow:0 0 6px currentColor;}
@@ -1196,16 +1199,19 @@ const ACTDATA=[
 {t:'2026-09-07 15:52',ph:'XHY-0567',c:'大九湖湿地巡护中发现有游客驾车驶入生态保育区，碾压草甸约20平方米。',r:'当事人已劝离并接受宣传教育，受损草甸已登记，移交景区管理处跟进恢复。',id:'XH-20260907-012',st:'已办结',c1:'巡护上报',c2:'破坏生态环境'},
 {t:'2026-09-07 09:20',ph:'XHY-0189',c:'新华镇龙口村河段发现河道内倾倒建筑垃圾约2立方米，部分已冲入水体。',r:'已联系属地政府安排清运，预计两日内完成；已报河湖长制平台备案。',id:'XH-20260907-005',st:'待派单',c1:'巡护上报',c2:'水环境污染'},
 {t:'2026-09-06 14:08',ph:'XHY-0731',c:'下谷坪乡板桥河村发现野生动物（疑似中华斑羚）受伤困于废弃铁丝网。',r:'野生动物救护站已到场解救并带回救治，现场废弃铁丝网已清除。',id:'XH-20260906-002',st:'已办结',c1:'巡护上报',c2:'野生动物保护'}];
-/* 自动事件（智能感知）示例数据 —— 等真实数据来了直接替换本数组 */
+/* 自动事件（智能感知）示例数据 —— 等真实数据来了直接替换本数组
+   dv=设备名称（对应地图图层色块颜色 dc），列表只显示"设备-编码 发现事件！"，详情点击展开 */
 const AUTODATA=[
-{t:'2026-09-09 09:17',ph:'CAM-HW-0217',c:'AI烟火识别：木鱼镇香溪源方向林缘发现疑似烟雾，置信度0.87，持续42秒未消散。',r:'已联动最近机槽无人机UAV-031起飞复核，确认为农户炊烟，告警解除。',id:'ZN-20260909-011',st:'已办结',c1:'AI烟火识别',c2:'疑似烟雾'},
-{t:'2026-09-09 07:55',ph:'SEN-BP-0093',c:'边坡位移监测：红坪镇画廊公路K12+300处 GNSS 监测点24小时累计位移8.6毫米，超黄色阈值。',r:'已推送地灾防护场景，加密监测频次至每小时1次，现场已设置警示标志。',id:'ZN-20260909-004',st:'处置中',c1:'边坡位移监测',c2:'位移超阈值'},
-{t:'2026-09-08 18:31',ph:'CAM-HW-0584',c:'AI人员识别：神农顶景区封闭保育区内识别到3名游客偏离游步道进入草甸。',r:'已通过广播喊话劝离，景区巡逻队到场引导返回步道。',id:'ZN-20260908-019',st:'已办结',c1:'AI人员识别',c2:'游客偏离'},
-{t:'2026-09-08 13:22',ph:'IRSAT-FY4B',c:'卫星热点监测：宋洛乡梨子坪村东南方向发现红外热点1处，亮温超背景值19K。',r:'无人机复核为采石场机械作业热源，非林火，已标注为白名单热源。',id:'ZN-20260908-009',st:'已办结',c1:'卫星热点监测',c2:'红外热点'},
-{t:'2026-09-08 11:47',ph:'CAM-TR-0122',c:'输电走廊AI识别：110kV神牵线47#-48#塔区段通道内树木距导线净空距离不足4米。',r:'已派单至输电运维班，计划三日内完成通道清理。',id:'ZN-20260908-006',st:'处置中',c1:'输电走廊监测',c2:'树障隐患'},
-{t:'2026-09-07 22:15',ph:'SEN-FH-0045',c:'林下火情探测器：阳日镇万福村后山林下温度骤升至68℃，伴随烟雾颗粒物浓度超标。',r:'无人机夜航复核确认为祭祀焚烧余烬，已扑熄并对当事人批评教育。',id:'ZN-20260907-021',st:'已办结',c1:'林下火情探测',c2:'温度骤升'},
-{t:'2026-09-07 16:40',ph:'CAM-HW-0361',c:'AI车辆识别：大九湖核心保育区入口识别到无通行证车辆试图闯入。',r:'闸机未放行，值班员现场核查后劝返。',id:'ZN-20260907-013',st:'已办结',c1:'AI车辆识别',c2:'违规闯入'},
-{t:'2026-09-07 06:28',ph:'CAM-LK-0088',c:'卡口相机：老君山林场方向凌晨有人员活动触发红外感应，疑似违规入山。',r:'待派单核查，已通知林场巡护队当日重点巡查该区域。',id:'ZN-20260907-002',st:'待派单',c1:'卡口监测',c2:'疑似违规入山'}];
+{t:'2026-09-09 09:17',ph:'CAM-HW-0217',dv:'高空球机',dc:'#38bdf8',c:'AI烟火识别：木鱼镇香溪源方向林缘发现疑似烟雾，置信度0.87，持续42秒未消散。',r:'已联动最近机槽无人机UAV-031起飞复核，确认为农户炊烟，告警解除。',id:'ZN-20260909-011',st:'已办结',c1:'AI烟火识别',c2:'疑似烟雾'},
+{t:'2026-09-09 07:55',ph:'SEN-BP-0093',dv:'地灾隐患点',dc:'#fbbf24',c:'边坡位移监测：红坪镇画廊公路K12+300处 GNSS 监测点24小时累计位移8.6毫米，超黄色阈值。',r:'已推送地灾防护场景，加密监测频次至每小时1次，现场已设置警示标志。',id:'ZN-20260909-004',st:'处置中',c1:'边坡位移监测',c2:'位移超阈值'},
+{t:'2026-09-08 18:31',ph:'CAM-HW-0584',dv:'高空球机',dc:'#38bdf8',c:'AI人员识别：神农顶景区封闭保育区内识别到3名游客偏离游步道进入草甸。',r:'已通过广播喊话劝离，景区巡逻队到场引导返回步道。',id:'ZN-20260908-019',st:'已办结',c1:'AI人员识别',c2:'游客偏离'},
+{t:'2026-09-08 13:22',ph:'IRSAT-FY4B',dv:'卫星',dc:'#a78bfa',c:'卫星热点监测：宋洛乡梨子坪村东南方向发现红外热点1处，亮温超背景值19K。',r:'无人机复核为采石场机械作业热源，非林火，已标注为白名单热源。',id:'ZN-20260908-009',st:'已办结',c1:'卫星热点监测',c2:'红外热点'},
+{t:'2026-09-08 11:47',ph:'CAM-TR-0122',dv:'雪亮摄像头',dc:'#60a5fa',c:'输电走廊AI识别：110kV神牵线47#-48#塔区段通道内树木距导线净空距离不足4米。',r:'已派单至输电运维班，计划三日内完成通道清理。',id:'ZN-20260908-006',st:'处置中',c1:'输电走廊监测',c2:'树障隐患'},
+{t:'2026-09-07 22:15',ph:'SEN-FH-0045',dv:'林下火监测',dc:'#34d399',c:'林下火情探测器：阳日镇万福村后山林下温度骤升至68℃，伴随烟雾颗粒物浓度超标。',r:'无人机夜航复核确认为祭祀焚烧余烬，已扑熄并对当事人批评教育。',id:'ZN-20260907-021',st:'已办结',c1:'林下火情探测',c2:'温度骤升'},
+{t:'2026-09-07 16:40',ph:'CAM-HW-0361',dv:'周界视频',dc:'#818cf8',c:'AI车辆识别：大九湖核心保育区入口识别到无通行证车辆试图闯入。',r:'闸机未放行，值班员现场核查后劝返。',id:'ZN-20260907-013',st:'已办结',c1:'AI车辆识别',c2:'违规闯入'},
+{t:'2026-09-07 14:05',ph:'IRCAM-0312',dv:'红外相机',dc:'#fb923c',c:'红外相机：老君山保护区南坡监测到川金丝猴种群活动影像，数量约12只。',r:'影像已归档至野生动物监测平台，该区域列入重点保护巡查范围。',id:'ZN-20260907-010',st:'已办结',c1:'红外相机监测',c2:'野生动物活动'},
+{t:'2026-09-07 06:28',ph:'CAM-LK-0088',dv:'周界视频',dc:'#818cf8',c:'卡口相机：老君山林场方向凌晨有人员活动触发红外感应，疑似违规入山。',r:'待派单核查，已通知林场巡护队当日重点巡查该区域。',id:'ZN-20260907-002',st:'待派单',c1:'卡口监测',c2:'疑似违规入山'},
+{t:'2026-09-06 20:12',ph:'WQ-009',dv:'水质监测站',dc:'#4ade80',c:'水质监测站：大九湖五号湖总磷浓度短时超标，峰值0.06mg/L。',r:'已加密采样监测，排查周边无新增污染源，两小时后指标回落正常。',id:'ZN-20260906-008',st:'已办结',c1:'水质监测',c2:'总磷超标'}];
 /* 事件分类图标库：按关键词匹配业务类型/内容 */
 const EV_ICONS=[
  {re:/火|烟|焚烧|燃/,c:'#fb923c',svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.8 2.8-2.2 4.2-2.2 7a4.2 4.2 0 008.4 0c0-1.8-.9-2.8-.9-2.8s2.9 1.4 2.9 4.8a6.2 6.2 0 11-12.4 0C7.6 7 10.8 5.4 12 2z"/></svg>'},
@@ -1224,9 +1230,12 @@ function evIcon(d){const s=(d.c1||'')+(d.c2||'')+d.c;for(const ic of EV_ICONS){i
 /* 通用列表渲染：图标 + 内容 + 时间 + 状态药丸 */
 function renderWoList(elId,data,tag){
   document.getElementById(elId).innerHTML=data.map((d,i)=>{const ic=evIcon(d),sc=stCls(d.st);
+    const main=d.dv
+      ? `<span class="wc" style="flex:none;overflow:visible;text-overflow:clip"><span class="wdev" style="color:${d.dc};text-shadow:0 0 10px ${d.dc}66">${esc(d.dv)}<span class="wcode">-${esc(d.ph)}</span></span><span class="whint">发现事件！</span></span><span style="flex:1"></span>`
+      : `<span class="wc">${esc(d.c)}</span>`;
     return `<div class="worow s-${sc}" data-i="${i}">
-  <span class="wic" style="--ic:${ic.c}">${ic.svg}</span>
-  <span class="wc">${esc(d.c)}</span>
+  <span class="wic" style="--ic:${d.dc||ic.c}">${ic.svg}</span>
+  ${main}
   <span class="wt">${esc(d.t.slice(5))}</span>
   <span class="ws ${sc}">${esc(d.st.replace('(a)',''))}</span></div>`;}).join('');
   document.querySelectorAll('#'+elId+' .worow').forEach(el=>el.onclick=()=>openWo(data[+el.dataset.i],tag));
