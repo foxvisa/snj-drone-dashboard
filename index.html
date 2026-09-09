@@ -167,8 +167,8 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
 .stat .num.tick{animation:numShine 3.2s linear infinite,numTick .5s cubic-bezier(.2,.8,.3,1);}
 @keyframes numTick{0%{transform:scale(1);}35%{transform:scale(1.18);}100%{transform:scale(1);}}
 .stat .lbl{font-size:13px;color:var(--txt);margin-top:3px;letter-spacing:1px;}
-#L2{left:16px;top:96px;width:400px;height:116px;}
-#L3{left:16px;top:224px;width:400px;height:160px;}
+#L2{left:16px;top:96px;width:400px;height:160px;}
+#L3{left:16px;top:268px;width:400px;height:116px;}
 #L4{left:16px;top:396px;width:400px;height:420px;}
 #L5{left:16px;top:828px;width:400px;height:236px;}
 /* 空天地人：大字 + 图标 */
@@ -652,16 +652,16 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
   <!-- ================= 总览视图 ================= -->
   <div id="viewOverview">
     <div class="panel" id="L2">
-      <div class="ptitle"><span class="bc">空</span><svg class="bic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="6" height="6" rx="1" transform="rotate(45 12 12)"/><path d="M3 8l4 1M3 16l4-1M21 8l-4 1M21 16l-4-1M12 2v3M12 19v3" stroke-linecap="round"/></svg><span class="st">卫星遥感</span><span class="more">在轨运行 ›</span></div>
-      <div class="qlist">
-        <div class="qrow"><span class="qn">卫星</span><span class="qbar"><i style="width:30%"></i></span><span class="qv">14<b> 颗</b></span></div>
-      </div>
-    </div>
-    <div class="panel" id="L3">
       <div class="ptitle"><span class="bc">天</span><svg class="bic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="4.5" cy="4.5" r="2.4"/><circle cx="19.5" cy="4.5" r="2.4"/><circle cx="4.5" cy="19.5" r="2.4"/><circle cx="19.5" cy="19.5" r="2.4"/><path d="M6.3 6.3l3.6 3.6M17.7 6.3l-3.6 3.6M6.3 17.7l3.6-3.6M17.7 17.7l-3.6-3.6"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx="1.2" fill="currentColor" stroke="none"/></svg><span class="st">空中巡查</span><span class="more">实时在线 ›</span></div>
       <div class="qlist">
         <div class="qrow"><span class="qn">无人机</span><span class="qbar"><i style="width:44%"></i></span><span class="qv">46<b> 架</b></span></div>
         <div class="qrow"><span class="qn">高空球机</span><span class="qbar"><i style="width:18%"></i></span><span class="qv">5<b> 个</b></span></div>
+      </div>
+    </div>
+    <div class="panel" id="L3">
+      <div class="ptitle"><span class="bc">空</span><svg class="bic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="6" height="6" rx="1" transform="rotate(45 12 12)"/><path d="M3 8l4 1M3 16l4-1M21 8l-4 1M21 16l-4-1M12 2v3M12 19v3" stroke-linecap="round"/></svg><span class="st">卫星遥感</span><span class="more">在轨运行 ›</span></div>
+      <div class="qlist">
+        <div class="qrow"><span class="qn">卫星</span><span class="qbar"><i style="width:30%"></i></span><span class="qv">14<b> 颗</b></span></div>
       </div>
     </div>
     <div class="panel" id="L4">
@@ -727,8 +727,8 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
         <div><span style="color:#aef">✈</span>在飞无人机（当前 8 架）</div>
       </div>
       <div id="layerBar">
-        <span class="lgrp">空</span><span class="lchip" data-layer="sat" style="--lc:#a78bfa">卫星</span>
         <span class="lgrp">天</span><span class="lchip on" data-layer="uav" style="--lc:#22d3ee">无人机</span><span class="lchip" data-layer="cam" style="--lc:#38bdf8">高空球机</span>
+        <span class="lgrp">空</span><span class="lchip" data-layer="sat" style="--lc:#a78bfa">卫星</span>
         <span class="lgrp">地</span><span class="lchip on" data-layer="sens" style="--lc:#34d399">传感器</span><span class="lchip" data-layer="geo" style="--lc:#fbbf24">地灾隐患点</span><span class="lchip" data-layer="ir" style="--lc:#fb923c">红外相机</span><span class="lchip" data-layer="xl" style="--lc:#60a5fa">雪亮摄像头</span><span class="lchip" data-layer="zj" style="--lc:#818cf8">州界视频</span><span class="lchip" data-layer="air" style="--lc:#2dd4bf">空气监测站</span><span class="lchip" data-layer="water" style="--lc:#4ade80">水质监测站</span>
         <span class="lgrp">人</span><span class="lchip" data-layer="ranger" style="--lc:#f472b6">巡护员</span><span class="lchip" data-layer="route" style="--lc:#e879f9">巡护路线</span>
       </div>
