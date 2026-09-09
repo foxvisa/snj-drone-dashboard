@@ -219,6 +219,9 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
 .worow .wdev{font-weight:700;letter-spacing:.5px;}
 .worow .wcode{font-family:Consolas,monospace;font-size:10.5px;font-weight:400;opacity:.8;letter-spacing:0;}
 .worow .whint{color:var(--dim);margin-left:5px;font-size:11px;letter-spacing:1px;flex:none;}
+.worow .wcat{flex:none;font-size:10px;letter-spacing:1px;padding:0 5px;border-radius:3px;
+  color:var(--cc);border:1px solid color-mix(in srgb,var(--cc) 55%,transparent);
+  background:color-mix(in srgb,var(--cc) 12%,transparent);}
 .worow .wt{color:var(--dim);font-family:Consolas,monospace;font-size:11px;flex:none;}
 .worow .ws{flex:none;display:flex;align-items:center;gap:5px;padding:1px 7px;font-size:11px;
   border:1px solid;white-space:nowrap;border-radius:10px;letter-spacing:1px;}
@@ -719,11 +722,11 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
       <div class="ptitle">事件列表<span class="more" style="color:#f87171">● 滚动更新</span></div>
       <div class="evsec-wrap">
         <div class="evsec" style="--ec:#34d399">
-          <div class="evsec-h"><i style="background:#34d399;box-shadow:0 0 8px #34d399"></i>主动事件<span class="esrc">巡护上报</span><span class="ecnt" id="actCnt">—</span></div>
+          <div class="evsec-h"><i style="background:#34d399;box-shadow:0 0 8px #34d399"></i>主动事件<span class="esrc">智能感知</span><span class="ecnt" id="actCnt">—</span></div>
           <div class="wolist" id="actList"></div>
         </div>
         <div class="evsec" style="--ec:#22d3ee">
-          <div class="evsec-h"><i style="background:#22d3ee;box-shadow:0 0 8px #22d3ee"></i>自动事件<span class="esrc">智能感知</span><span class="ecnt" id="autoCnt">—</span></div>
+          <div class="evsec-h"><i style="background:#22d3ee;box-shadow:0 0 8px #22d3ee"></i>自动事件<span class="esrc">无人机巡查</span><span class="ecnt" id="autoCnt">—</span></div>
           <div class="wolist" id="autoList"></div>
         </div>
         <div class="evsec" style="--ec:#fbbf24">
@@ -1189,19 +1192,11 @@ const stCls=s=>s.includes('派发')||s.includes('处置')?'run':(s.includes('直
 /* 弹窗字段标签按栏目区分 */
 const WO_TAGS={
   psv:{tm:'来电时间',src:'来电号码',cat:'业务类型',tag:'被动工单'},
-  act:{tm:'上报时间',src:'巡护员',cat:'业务类型',tag:'主动工单'},
-  auto:{tm:'触发时间',src:'感知设备',cat:'告警类型',tag:'自动工单'}};
-/* 主动事件（巡护上报）示例数据 —— 等真实数据来了直接替换本数组 */
-const ACTDATA=[
-{t:'2026-09-09 08:42',ph:'XHY-0342',c:'巡护员在木鱼镇官门山步道发现索道支架基础有新裂缝，裂缝长约1.2米，最宽处约3毫米，周边土体有松动迹象。',r:'已通知景区封闭该段步道并设置警戒，地质监测设备已布设，纳入地灾防护跟踪清单。',id:'XH-20260909-001',st:'处置中',c1:'巡护上报',c2:'地质灾害隐患'},
-{t:'2026-09-08 16:15',ph:'XHY-0218',c:'松柏镇麻湾村林区边缘发现枯枝堆积点三处，紧邻林缘农事用火区域，存在火险隐患。',r:'已协调村委会当日完成清理转运，并对周边农户开展防火宣传。',id:'XH-20260908-007',st:'已办结',c1:'巡护上报',c2:'森林火灾隐患'},
-{t:'2026-09-08 10:36',ph:'XHY-0855',c:'红坪镇塔坪村周边发现松材线虫病疫木疑似症状松树2株，针叶呈红褐色。',r:'已取样送检，等待检疫结果；对周边50米范围松树实施药剂预防。',id:'XH-20260908-003',st:'处置中',c1:'巡护上报',c2:'林业有害生物'},
-{t:'2026-09-07 15:52',ph:'XHY-0567',c:'大九湖湿地巡护中发现有游客驾车驶入生态保育区，碾压草甸约20平方米。',r:'当事人已劝离并接受宣传教育，受损草甸已登记，移交景区管理处跟进恢复。',id:'XH-20260907-012',st:'已办结',c1:'巡护上报',c2:'破坏生态环境'},
-{t:'2026-09-07 09:20',ph:'XHY-0189',c:'新华镇龙口村河段发现河道内倾倒建筑垃圾约2立方米，部分已冲入水体。',r:'已联系属地政府安排清运，预计两日内完成；已报河湖长制平台备案。',id:'XH-20260907-005',st:'待派单',c1:'巡护上报',c2:'水环境污染'},
-{t:'2026-09-06 14:08',ph:'XHY-0731',c:'下谷坪乡板桥河村发现野生动物（疑似中华斑羚）受伤困于废弃铁丝网。',r:'野生动物救护站已到场解救并带回救治，现场废弃铁丝网已清除。',id:'XH-20260906-002',st:'已办结',c1:'巡护上报',c2:'野生动物保护'}];
-/* 自动事件（智能感知）示例数据 —— 等真实数据来了直接替换本数组
+  act:{tm:'触发时间',src:'感知设备',cat:'告警类型',tag:'主动工单'},
+  auto:{tm:'发现时间',src:'无人机编号',cat:'事件类型',tag:'自动工单'}};
+/* 主动事件（智能感知设备）—— 等真实数据来了直接替换本数组
    dv=设备名称（对应地图图层色块颜色 dc），列表只显示"设备-编码 发现事件！"，详情点击展开 */
-const AUTODATA=[
+const ACTDATA=[
 {t:'2026-09-09 09:17',ph:'CAM-HW-0217',dv:'高空球机',dc:'#38bdf8',c:'AI烟火识别：木鱼镇香溪源方向林缘发现疑似烟雾，置信度0.87，持续42秒未消散。',r:'已联动最近机槽无人机UAV-031起飞复核，确认为农户炊烟，告警解除。',id:'ZN-20260909-011',st:'已办结',c1:'AI烟火识别',c2:'疑似烟雾'},
 {t:'2026-09-09 07:55',ph:'SEN-BP-0093',dv:'地灾隐患点',dc:'#fbbf24',c:'边坡位移监测：红坪镇画廊公路K12+300处 GNSS 监测点24小时累计位移8.6毫米，超黄色阈值。',r:'已推送地灾防护场景，加密监测频次至每小时1次，现场已设置警示标志。',id:'ZN-20260909-004',st:'处置中',c1:'边坡位移监测',c2:'位移超阈值'},
 {t:'2026-09-08 18:31',ph:'CAM-HW-0584',dv:'高空球机',dc:'#38bdf8',c:'AI人员识别：神农顶景区封闭保育区内识别到3名游客偏离游步道进入草甸。',r:'已通过广播喊话劝离，景区巡逻队到场引导返回步道。',id:'ZN-20260908-019',st:'已办结',c1:'AI人员识别',c2:'游客偏离'},
@@ -1212,7 +1207,19 @@ const AUTODATA=[
 {t:'2026-09-07 14:05',ph:'IRCAM-0312',dv:'红外相机',dc:'#fb923c',c:'红外相机：老君山保护区南坡监测到川金丝猴种群活动影像，数量约12只。',r:'影像已归档至野生动物监测平台，该区域列入重点保护巡查范围。',id:'ZN-20260907-010',st:'已办结',c1:'红外相机监测',c2:'野生动物活动'},
 {t:'2026-09-07 06:28',ph:'CAM-LK-0088',dv:'周界视频',dc:'#818cf8',c:'卡口相机：老君山林场方向凌晨有人员活动触发红外感应，疑似违规入山。',r:'待派单核查，已通知林场巡护队当日重点巡查该区域。',id:'ZN-20260907-002',st:'待派单',c1:'卡口监测',c2:'疑似违规入山'},
 {t:'2026-09-06 20:12',ph:'WQ-009',dv:'水质监测站',dc:'#4ade80',c:'水质监测站：大九湖五号湖总磷浓度短时超标，峰值0.06mg/L。',r:'已加密采样监测，排查周边无新增污染源，两小时后指标回落正常。',id:'ZN-20260906-008',st:'已办结',c1:'水质监测',c2:'总磷超标'}];
+/* 自动事件（无人机巡查发现）—— 等真实数据来了直接替换本数组
+   dv 固定为"无人机"（青色 #22d3ee 对应地图无人机图层），ev=事件类型短描述 */
+const AUTODATA=[
+{t:'2026-09-09 10:05',ph:'UAV-031',dv:'无人机',dc:'#22d3ee',ev:'烟气点识别',c:'无人机巡查至木鱼镇香溪源林缘，AI识别到烟气点1处，疑似农事用火，坐标N31.45°E110.68°。',r:'低空复核确认为农户规范时段炊烟，无蔓延风险，已记录归档。',id:'WR-20260909-006',st:'已办结',c1:'无人机巡查',c2:'烟气点识别'},
+{t:'2026-09-09 09:32',ph:'UAV-014',dv:'无人机',dc:'#22d3ee',ev:'人流预警',c:'神农顶景区入口广场人流密度超预警阈值，实时估算约2600人，超出舒适承载量80%。',r:'已推送景区调度中心启动分流预案，入口闸机限速放行。',id:'WR-20260909-003',st:'处置中',c1:'无人机巡查',c2:'人流预警'},
+{t:'2026-09-08 17:48',ph:'UAV-022',dv:'无人机',dc:'#22d3ee',ev:'人员闯入',c:'老君山核心保护区北缘识别到2名人员沿非开放路线行进，疑似违规穿越。',r:'已引导最近巡护网格队员前往核查劝返，人员已退出核心区。',id:'WR-20260908-014',st:'已办结',c1:'无人机巡查',c2:'人员闯入'},
+{t:'2026-09-08 15:20',ph:'UAV-045',dv:'无人机',dc:'#22d3ee',ev:'疫木识别',c:'红坪镇塔坪村松林上空多光谱识别到3株针叶变色松树，疑似松材线虫病疫木。',r:'坐标已推送森防站取样复检，周边500米纳入重点监测航线。',id:'WR-20260908-009',st:'处置中',c1:'无人机巡查',c2:'疫木识别'},
+{t:'2026-09-08 11:10',ph:'UAV-008',dv:'无人机',dc:'#22d3ee',ev:'烟火复核',c:'接林下火监测SEN-FH-0045告警后自动起飞复核：阳日镇万福村后山发现祭祀焚烧余烬，过火面积约3平方米。',r:'现场影像推送镇林业站，明火已扑熄，余烬已处理完毕。',id:'WR-20260908-004',st:'已办结',c1:'无人机巡查',c2:'烟火复核'},
+{t:'2026-09-07 16:55',ph:'UAV-037',dv:'无人机',dc:'#22d3ee',ev:'车辆识别',c:'大九湖湿地保育区便道识别到无通行证社会车辆1辆停留超过20分钟。',r:'车牌信息已推送景区管理处，巡逻队到场劝离并登记。',id:'WR-20260907-018',st:'已办结',c1:'无人机巡查',c2:'车辆识别'},
+{t:'2026-09-07 10:26',ph:'UAV-052',dv:'无人机',dc:'#22d3ee',ev:'裂缝识别',c:'画廊公路K12+300边坡巡查影像比对发现坡面新增裂缝一条，长度约0.8米。',r:'已与地灾隐患点SEN-BP-0093数据交叉验证，纳入地灾防护跟踪清单。',id:'WR-20260907-007',st:'待派单',c1:'无人机巡查',c2:'裂缝识别'},
+{t:'2026-09-06 21:40',ph:'UAV-019',dv:'无人机',dc:'#22d3ee',ev:'热源巡查',c:'夜间红外巡查：松柏镇龙沟村林缘发现小型热源1处，温度46℃。',r:'复核为烘干设备作业热源，已标注白名单，无火险。',id:'WR-20260906-011',st:'已办结',c1:'无人机巡查',c2:'热源巡查'}];
 /* 事件分类图标库：按关键词匹配业务类型/内容 */
+const DRONE_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="4.5" cy="4.5" r="2.4"/><circle cx="19.5" cy="4.5" r="2.4"/><circle cx="4.5" cy="19.5" r="2.4"/><circle cx="19.5" cy="19.5" r="2.4"/><path d="M6.3 6.3l3.6 3.6M17.7 6.3l-3.6 3.6M6.3 17.7l3.6-3.6M17.7 17.7l-3.6-3.6"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx="1.2" fill="currentColor" stroke="none"/></svg>';
 const EV_ICONS=[
  {re:/火|烟|焚烧|燃/,c:'#fb923c',svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.8 2.8-2.2 4.2-2.2 7a4.2 4.2 0 008.4 0c0-1.8-.9-2.8-.9-2.8s2.9 1.4 2.9 4.8a6.2 6.2 0 11-12.4 0C7.6 7 10.8 5.4 12 2z"/></svg>'},
  {re:/地质|边坡|位移|泥石|危岩|裂缝/,c:'#a78bfa',svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 20L9.5 6l4.5 7.5L17 9.5l4.5 10.5z"/></svg>'},
@@ -1227,15 +1234,25 @@ const EV_ICONS=[
  {re:/卡口|摄像|识别|AI|监测|感应|探测/,c:'#2dd4bf',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.5" stroke-dasharray="3 2"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg>'},
  {re:/./,c:'#7ea8cc',svg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 3h3l1.5 4.5-2.1 1.6a12.5 12.5 0 005.9 5.9l1.6-2.1H21v3a2.6 2.6 0 01-2.8 2.6C10.5 17.9 6.1 13.5 5.5 5.8A2.6 2.6 0 016.6 3z" transform="translate(0 1.5) scale(.92)"/></svg>'}];
 function evIcon(d){const s=(d.c1||'')+(d.c2||'')+d.c;for(const ic of EV_ICONS){if(ic.re.test(s))return ic;}}
+/* 被动事件分类：投诉/建议/咨询/求助 */
+const PSV_CATS={
+  ts:{n:'投诉',c:'#f87171',re:/投诉|举报|不满意|违规|处罚|反映.*(?:问题|扰民|污染|收费|质量)/},
+  jy:{n:'建议',c:'#fbbf24',re:/建议|希望|提议|能否|可不可以/},
+  qz:{n:'求助',c:'#a78bfa',re:/求助|请求|帮助|被困|救援|解决/},
+  zx:{n:'咨询',c:'#38bdf8',re:/./}};
+function psvCat(d){const s=(d.c1||'')+(d.c2||'')+d.c;
+  for(const k of ['ts','jy','qz','zx']){if(PSV_CATS[k].re.test(s))return PSV_CATS[k];}}
 /* 通用列表渲染：图标 + 内容 + 时间 + 状态药丸 */
 function renderWoList(elId,data,tag){
-  document.getElementById(elId).innerHTML=data.map((d,i)=>{const ic=evIcon(d),sc=stCls(d.st);
+  document.getElementById(elId).innerHTML=data.map((d,i)=>{const sc=stCls(d.st);
+    const ic=d.dv==='无人机'?{c:d.dc,svg:DRONE_ICON}:evIcon(d);
     const main=d.dv
-      ? `<span class="wc" style="flex:none;overflow:visible;text-overflow:clip"><span class="wdev" style="color:${d.dc};text-shadow:0 0 10px ${d.dc}66">${esc(d.dv)}<span class="wcode">-${esc(d.ph)}</span></span><span class="whint">发现事件！</span></span><span style="flex:1"></span>`
+      ? `<span class="wc" style="flex:none;overflow:visible;text-overflow:clip"><span class="wdev" style="color:${d.dc};text-shadow:0 0 10px ${d.dc}66">${esc(d.dv)}<span class="wcode">-${esc(d.ph)}</span></span><span class="whint">${esc(d.ev||'发现事件！')}</span></span><span style="flex:1"></span>`
       : `<span class="wc">${esc(d.c)}</span>`;
+    const cat=tag==='psv'?`<span class="wcat" style="--cc:${psvCat(d).c}">${psvCat(d).n}</span>`:'';
     return `<div class="worow s-${sc}" data-i="${i}">
   <span class="wic" style="--ic:${d.dc||ic.c}">${ic.svg}</span>
-  ${main}
+  ${cat}${main}
   <span class="wt">${esc(d.t.slice(5))}</span>
   <span class="ws ${sc}">${esc(d.st.replace('(a)',''))}</span></div>`;}).join('');
   document.querySelectorAll('#'+elId+' .worow').forEach(el=>el.onclick=()=>openWo(data[+el.dataset.i],tag));
