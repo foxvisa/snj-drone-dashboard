@@ -308,7 +308,7 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
   background:linear-gradient(180deg,transparent 96%,rgba(56,189,248,.12) 100%);
   background-size:100% 220px;animation:scan 7s linear infinite;}
 @keyframes scan{from{background-position:0 -220px;}to{background-position:0 700px;}}
-.map-legend{position:absolute;left:14px;top:44px;z-index:5;font-size:12.5px;color:var(--txt);
+.map-legend{position:absolute;left:14px;bottom:56px;z-index:5;font-size:12.5px;color:var(--txt);
   background:rgba(4,14,32,.75);border:1px solid rgba(56,189,248,.3);padding:8px 12px;letter-spacing:1px;}
 .map-legend div{display:flex;align-items:center;gap:8px;margin:4px 0;}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
@@ -1028,7 +1028,8 @@ Object.entries(LAYERS).forEach(([k,v])=>{
 document.querySelector('.lyr[data-l="sens"]').classList.add('on');
 document.querySelectorAll('.lchip').forEach(c=>c.onclick=()=>{
   const on=c.classList.toggle('on').valueOf(),k=c.dataset.layer;
-  if(k==='uav'){uavs.forEach(u=>u.style.display=on?'':'none');}
+  if(k==='uav'){uavs.forEach(u=>u.style.display=on?'':'none');
+    document.querySelector('.map-legend').style.display=on?'':'none';}
   else{document.querySelectorAll(`.lyr[data-l="${k}"]`).forEach(e=>e.classList.toggle('on',on));}
   toast((on?'已叠加图层 · ':'已隐藏图层 · ')+c.textContent);});
 
