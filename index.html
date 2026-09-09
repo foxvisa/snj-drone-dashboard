@@ -714,21 +714,15 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
       <div class="ptitle">事件列表<span class="more" style="color:#f87171">● 滚动更新</span></div>
       <div class="evsec-wrap">
         <div class="evsec">
-          <div class="evsec-h"><i style="background:#34d399;box-shadow:0 0 8px #34d399"></i>主动事件<span class="esrc">巡护上报</span><span class="ecnt">8 起</span></div>
-          <div class="alarm-row"><span class="tm">09:12</span><span class="lv lv2">二级</span><span>巡护员上报盗伐线索 · 老君山东界</span></div>
-          <div class="alarm-row"><span class="tm">08:40</span><span class="lv lv3">三级</span><span>违规入区人员劝离 · 神农顶步道</span></div>
-          <div class="alarm-row"><span class="tm">昨日</span><span class="lv lv2">二级</span><span>林缘违建棚屋核查 · 木鱼镇</span></div>
-          <div class="alarm-row"><span class="tm">昨日</span><span class="lv lv3">三级</span><span>巡护路线异常停留上报 · 九冲河</span></div>
+          <div class="evsec-h"><i style="background:#34d399;box-shadow:0 0 8px #34d399"></i>主动事件<span class="esrc">巡护上报</span><span class="ecnt" id="actCnt">—</span></div>
+          <div class="wolist" id="actList"></div>
         </div>
         <div class="evsec">
-          <div class="evsec-h"><i style="background:#22d3ee;box-shadow:0 0 8px #22d3ee"></i>自动事件<span class="esrc">智能感知</span><span class="ecnt">23 起</span></div>
-          <div class="alarm-row"><span class="tm">09:42</span><span class="lv lv2">二级</span><span>烟雾疑似告警 · 红坪镇西北坡</span></div>
-          <div class="alarm-row"><span class="tm">09:36</span><span class="lv lv3">三级</span><span>游客偏离游览路线 · 大九湖3号步道</span></div>
-          <div class="alarm-row"><span class="tm">08:15</span><span class="lv lv1">一级</span><span>边坡裂缝位移超阈值 · 阴峪河G347段</span></div>
-          <div class="alarm-row"><span class="tm">07:56</span><span class="lv lv3">三级</span><span>松材线虫疑似枯死木 · 新华镇松林</span></div>
+          <div class="evsec-h"><i style="background:#22d3ee;box-shadow:0 0 8px #22d3ee"></i>自动事件<span class="esrc">智能感知</span><span class="ecnt" id="autoCnt">—</span></div>
+          <div class="wolist" id="autoList"></div>
         </div>
         <div class="evsec">
-          <div class="evsec-h"><i style="background:#fbbf24;box-shadow:0 0 8px #fbbf24"></i>被动事件<span class="esrc">12345热线 · 群众来电</span><span class="ecnt">8月 1910 起</span></div>
+          <div class="evsec-h"><i style="background:#fbbf24;box-shadow:0 0 8px #fbbf24"></i>被动事件<span class="esrc">12345热线 · 群众来电</span><span class="ecnt" id="psvCnt">—</span></div>
           <div class="wolist" id="woList"></div>
         </div>
       </div>
@@ -885,7 +879,7 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
 
   <!-- ================= 工单详情弹窗 ================= -->
   <div class="modal" id="woModal">
-    <div class="mtitle">工单详情 · <span id="woId" style="color:var(--cyan2)">—</span><div class="mclose" data-close="woModal">✕</div></div>
+    <div class="mtitle"><span id="woTag">工单</span>详情 · <span id="woId" style="color:var(--cyan2)">—</span><div class="mclose" data-close="woModal">✕</div></div>
     <div class="wo-body" id="woBody"></div>
   </div>
 
@@ -1184,26 +1178,63 @@ function closeAll(){
   document.getElementById('mask1').classList.remove('show');
   closeDroneModal();closeEventModal();closeWoModal();
 }
-/* ===== 被动事件：工单列表渲染 + 详情弹窗 ===== */
+/* ===== 事件工单：通用渲染 + 详情弹窗（被动/主动/自动三节共用） ===== */
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const stCls=s=>s.includes('派发')?'run':(s.includes('直接')?'dir':'ok');
-document.getElementById('woList').innerHTML=WODATA.map((d,i)=>`<div class="worow" data-i="${i}">
+const stCls=s=>s.includes('派发')||s.includes('处置')?'run':(s.includes('直接')||s.includes('待派')?'dir':'ok');
+/* 弹窗字段标签按栏目区分 */
+const WO_TAGS={
+  psv:{tm:'来电时间',src:'来电号码',cat:'业务类型',tag:'被动工单'},
+  act:{tm:'上报时间',src:'巡护员',cat:'业务类型',tag:'主动工单'},
+  auto:{tm:'触发时间',src:'感知设备',cat:'告警类型',tag:'自动工单'}};
+/* 主动事件（巡护上报）示例数据 —— 等真实数据来了直接替换本数组 */
+const ACTDATA=[
+{t:'2026-09-09 08:42',ph:'XHY-0342',c:'巡护员在木鱼镇官门山步道发现索道支架基础有新裂缝，裂缝长约1.2米，最宽处约3毫米，周边土体有松动迹象。',r:'已通知景区封闭该段步道并设置警戒，地质监测设备已布设，纳入地灾防护跟踪清单。',id:'XH-20260909-001',st:'处置中',c1:'巡护上报',c2:'地质灾害隐患'},
+{t:'2026-09-08 16:15',ph:'XHY-0218',c:'松柏镇麻湾村林区边缘发现枯枝堆积点三处，紧邻林缘农事用火区域，存在火险隐患。',r:'已协调村委会当日完成清理转运，并对周边农户开展防火宣传。',id:'XH-20260908-007',st:'已办结',c1:'巡护上报',c2:'森林火灾隐患'},
+{t:'2026-09-08 10:36',ph:'XHY-0855',c:'红坪镇塔坪村周边发现松材线虫病疫木疑似症状松树2株，针叶呈红褐色。',r:'已取样送检，等待检疫结果；对周边50米范围松树实施药剂预防。',id:'XH-20260908-003',st:'处置中',c1:'巡护上报',c2:'林业有害生物'},
+{t:'2026-09-07 15:52',ph:'XHY-0567',c:'大九湖湿地巡护中发现有游客驾车驶入生态保育区，碾压草甸约20平方米。',r:'当事人已劝离并接受宣传教育，受损草甸已登记，移交景区管理处跟进恢复。',id:'XH-20260907-012',st:'已办结',c1:'巡护上报',c2:'破坏生态环境'},
+{t:'2026-09-07 09:20',ph:'XHY-0189',c:'新华镇龙口村河段发现河道内倾倒建筑垃圾约2立方米，部分已冲入水体。',r:'已联系属地政府安排清运，预计两日内完成；已报河湖长制平台备案。',id:'XH-20260907-005',st:'待派单',c1:'巡护上报',c2:'水环境污染'},
+{t:'2026-09-06 14:08',ph:'XHY-0731',c:'下谷坪乡板桥河村发现野生动物（疑似中华斑羚）受伤困于废弃铁丝网。',r:'野生动物救护站已到场解救并带回救治，现场废弃铁丝网已清除。',id:'XH-20260906-002',st:'已办结',c1:'巡护上报',c2:'野生动物保护'}];
+/* 自动事件（智能感知）示例数据 —— 等真实数据来了直接替换本数组 */
+const AUTODATA=[
+{t:'2026-09-09 09:17',ph:'CAM-HW-0217',c:'AI烟火识别：木鱼镇香溪源方向林缘发现疑似烟雾，置信度0.87，持续42秒未消散。',r:'已联动最近机槽无人机UAV-031起飞复核，确认为农户炊烟，告警解除。',id:'ZN-20260909-011',st:'已办结',c1:'AI烟火识别',c2:'疑似烟雾'},
+{t:'2026-09-09 07:55',ph:'SEN-BP-0093',c:'边坡位移监测：红坪镇画廊公路K12+300处 GNSS 监测点24小时累计位移8.6毫米，超黄色阈值。',r:'已推送地灾防护场景，加密监测频次至每小时1次，现场已设置警示标志。',id:'ZN-20260909-004',st:'处置中',c1:'边坡位移监测',c2:'位移超阈值'},
+{t:'2026-09-08 18:31',ph:'CAM-HW-0584',c:'AI人员识别：神农顶景区封闭保育区内识别到3名游客偏离游步道进入草甸。',r:'已通过广播喊话劝离，景区巡逻队到场引导返回步道。',id:'ZN-20260908-019',st:'已办结',c1:'AI人员识别',c2:'游客偏离'},
+{t:'2026-09-08 13:22',ph:'IRSAT-FY4B',c:'卫星热点监测：宋洛乡梨子坪村东南方向发现红外热点1处，亮温超背景值19K。',r:'无人机复核为采石场机械作业热源，非林火，已标注为白名单热源。',id:'ZN-20260908-009',st:'已办结',c1:'卫星热点监测',c2:'红外热点'},
+{t:'2026-09-08 11:47',ph:'CAM-TR-0122',c:'输电走廊AI识别：110kV神牵线47#-48#塔区段通道内树木距导线净空距离不足4米。',r:'已派单至输电运维班，计划三日内完成通道清理。',id:'ZN-20260908-006',st:'处置中',c1:'输电走廊监测',c2:'树障隐患'},
+{t:'2026-09-07 22:15',ph:'SEN-FH-0045',c:'林下火情探测器：阳日镇万福村后山林下温度骤升至68℃，伴随烟雾颗粒物浓度超标。',r:'无人机夜航复核确认为祭祀焚烧余烬，已扑熄并对当事人批评教育。',id:'ZN-20260907-021',st:'已办结',c1:'林下火情探测',c2:'温度骤升'},
+{t:'2026-09-07 16:40',ph:'CAM-HW-0361',c:'AI车辆识别：大九湖核心保育区入口识别到无通行证车辆试图闯入。',r:'闸机未放行，值班员现场核查后劝返。',id:'ZN-20260907-013',st:'已办结',c1:'AI车辆识别',c2:'违规闯入'},
+{t:'2026-09-07 06:28',ph:'CAM-LK-0088',c:'卡口相机：老君山林场方向凌晨有人员活动触发红外感应，疑似违规入山。',r:'待派单核查，已通知林场巡护队当日重点巡查该区域。',id:'ZN-20260907-002',st:'待派单',c1:'卡口监测',c2:'疑似违规入山'}];
+/* 通用列表渲染：三列 时间/内容/状态 */
+function renderWoList(elId,data,tag){
+  document.getElementById(elId).innerHTML=data.map((d,i)=>`<div class="worow" data-i="${i}">
   <span class="wt">${esc(d.t.slice(5))}</span><span class="wc">${esc(d.c)}</span>
   <span class="ws ${stCls(d.st)}">${esc(d.st.replace('(a)',''))}</span></div>`).join('');
-document.querySelectorAll('#woList .worow').forEach(el=>el.onclick=()=>{
-  const d=WODATA[+el.dataset.i];
+  document.querySelectorAll('#'+elId+' .worow').forEach(el=>el.onclick=()=>openWo(data[+el.dataset.i],tag));
+}
+/* 通用详情弹窗 */
+function openWo(d,tag){
+  const L=WO_TAGS[tag]||WO_TAGS.psv;
+  document.getElementById('woTag').textContent=L.tag;
   document.getElementById('woId').textContent=d.id;
   document.getElementById('woBody').innerHTML=`
     <div class="wo-grid">
-      <div class="row"><span>来电时间</span><b>${esc(d.t)}</b></div>
-      <div class="row"><span>来电号码</span><b>${esc(d.ph)}</b></div>
-      <div class="row"><span>业务类型</span><b>${esc(d.c1)} / ${esc(d.c2)}</b></div>
+      <div class="row"><span>${L.tm}</span><b>${esc(d.t)}</b></div>
+      <div class="row"><span>${L.src}</span><b>${esc(d.ph)}</b></div>
+      <div class="row"><span>${L.cat}</span><b>${esc(d.c1)} / ${esc(d.c2)}</b></div>
       <div class="row"><span>办结状态</span><b>${esc(d.st.replace('(a)',''))}</b></div>
     </div>
     <h5>工单内容</h5><div class="wo-txt">${esc(d.c)}</div>
     <h5>处理结果</h5><div class="wo-txt">${esc(d.r)||'—'}</div>`;
   document.getElementById('mask1').classList.add('show');
-  document.getElementById('woModal').classList.add('show');});
+  document.getElementById('woModal').classList.add('show');
+}
+renderWoList('actList',ACTDATA,'act');
+renderWoList('autoList',AUTODATA,'auto');
+renderWoList('woList',WODATA,'psv');
+/* 数量角标随数据联动 */
+document.getElementById('actCnt').textContent=ACTDATA.length+' 起';
+document.getElementById('autoCnt').textContent=AUTODATA.length+' 起';
+document.getElementById('psvCnt').textContent='8月 '+WODATA.length+' 起';
 function closeWoModal(){document.getElementById('woModal').classList.remove('show');}
 
 document.querySelectorAll('[data-close]').forEach(el=>el.onclick=()=>{
@@ -1473,6 +1504,8 @@ if(op==='event')openEventDrawer();
 if(op==='droneModal'){openDroneDrawer();openDroneModal(FLEET.find(d=>d.sc.includes(curScene)&&d.st==='巡检中'));}
 if(op==='eventModal'){openEventDrawer();openEventModal(EVENTS[curScene][1]);}
 if(op==='wo')document.querySelector('#woList .worow').click();
+if(op==='act')document.querySelector('#actList .worow').click();
+if(op==='auto')document.querySelector('#autoList .worow').click();
 </script>
 </body>
 </html>
