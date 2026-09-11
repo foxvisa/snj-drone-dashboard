@@ -92,10 +92,11 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
 #weather{position:absolute;right:40px;top:66px;font-size:13px;color:var(--dim);}
 #weather b{color:var(--cyan);font-weight:400;}
 #weather .flyok{display:inline-block;margin-left:4px;padding:1px 10px;font-weight:900;font-size:13px;
-  letter-spacing:2px;color:#032a1a;border-radius:3px;
+  letter-spacing:2px;color:#032a1a;border-radius:3px;cursor:pointer;transition:transform .15s;
   background:linear-gradient(180deg,#5eead4,#22c55e);
   box-shadow:0 0 12px rgba(52,211,153,.8),0 0 28px rgba(52,211,153,.35);
   animation:flyokPulse 2s ease-in-out infinite;}
+#weather .flyok:hover{transform:scale(1.08);}
 @keyframes flyokPulse{50%{box-shadow:0 0 18px rgba(52,211,153,1),0 0 42px rgba(52,211,153,.5);}}
 
 /* ===== 面板通用 ===== */
@@ -681,7 +682,7 @@ nav .tab:nth-child(4)::before{animation-delay:-3.3s;}
       <div class="tab" data-k="fire"><span class="cn">火灾防护</span><span class="en">FIRE</span></div>
       <div class="tab" data-k="geo"><span class="cn">地灾防护</span><span class="en">GEO-SAFE</span></div>
     </nav>
-    <div id="weather">神农架林区 <b>多云转晴 18℃</b> · 东南风2级 · <span class="flyok">适飞</span></div>
+    <div id="weather">神农架林区 <b>多云转晴 18℃</b> · 东南风2级 · <span class="flyok" id="flyokBtn" title="进入无人机监控画面">适飞</span></div>
   </header>
 
   <!-- ================= 总览视图 ================= -->
@@ -1135,6 +1136,7 @@ function switchTab(k){
   }}
 document.querySelectorAll('#tabs .tab').forEach(t=>t.onclick=()=>switchTab(t.dataset.k));
 document.getElementById('btnBack').onclick=()=>switchTab('all');
+document.getElementById('flyokBtn').onclick=()=>location.href='monitor.html';
 addEventListener('resize',()=>chRate.resize());
 
 /* ===== 场景：子系统条 ===== */
